@@ -1,0 +1,32 @@
+﻿<Window x:Class="KinoRezerwator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="KinoRezerwator RZE - Wyszukiwarka" Height="450" Width="800">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Szukaj filmu:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14"/>
+            <TextBox x:Name="txtSzukaj" Width="200" Height="30" VerticalContentAlignment="Center" FontSize="14"/>
+            <Button x:Name="btnSzukaj" Content="Szukaj" Width="100" Margin="10,0,0,0" Click="btnSzukaj_Click"/>
+        </StackPanel>
+
+        <ListView x:Name="listaWynikow" Grid.Row="1" FontSize="14" MouseDoubleClick="listaWynikow_MouseDoubleClick">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Film" DisplayMemberBinding="{Binding TytulFilmu}" Width="200"/>
+                    <GridViewColumn Header="Kategoria" DisplayMemberBinding="{Binding Kategoria}" Width="100"/>
+
+                    <GridViewColumn Header="Cena" DisplayMemberBinding="{Binding Cena, StringFormat=C}" Width="80"/>
+
+                    <GridViewColumn Header="Kino" DisplayMemberBinding="{Binding Kino}" Width="150"/>
+                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataGodzina, StringFormat='dd.MM HH:mm'}" Width="120"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

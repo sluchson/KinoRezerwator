@@ -1,0 +1,41 @@
+﻿<Window x:Class="KinoRezerwator.RezerwacjaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rezerwacja Miejsc" Height="500" Width="600" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtTytulFilmu" Grid.Row="0" Text="Tytuł Filmu" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
+            <Separator Margin="0,0,0,10"/>
+
+            <TextBlock Text="Dane do rezerwacji:" FontWeight="Bold" Margin="0,0,0,5"/>
+
+            <DockPanel Margin="0,0,0,5">
+                <TextBlock Text="Imię i Nazwisko:" Width="100" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtImie" Height="25" VerticalContentAlignment="Center"/>
+            </DockPanel>
+
+            <DockPanel Margin="0,0,0,15">
+                <TextBlock Text="E-mail:" Width="100" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtEmail" Height="25" VerticalContentAlignment="Center"/>
+            </DockPanel>
+
+            <Button x:Name="btnRezerwuj" Content="POTWIERDZAM REZERWACJĘ" 
+                    Height="40" FontSize="16" FontWeight="Bold" Background="#DDDDDD"
+                    Click="btnRezerwuj_Click"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <UniformGrid x:Name="gridMiejsca" Rows="0" Columns="1" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        </ScrollViewer>
+
+    </Grid>
+</Window>
