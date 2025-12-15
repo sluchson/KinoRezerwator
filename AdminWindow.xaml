@@ -1,0 +1,83 @@
+﻿<Window x:Class="KinoRezerwator.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Panel Administratora" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TabControl Margin="10">
+
+            <TabItem Header="Zarządzaj Repertuarem">
+                <StackPanel Margin="20">
+
+                    <TextBlock Text="Dodaj Nowy Seans" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Wybierz Film:"/>
+                    <ComboBox x:Name="cmbFilmy" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Wybierz Kino:"/>
+                    <ComboBox x:Name="cmbKina" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10" SelectionChanged="cmbKina_SelectionChanged"/>
+
+                    <TextBlock Text="Wybierz Salę (wybierz kino najpierw):"/>
+                    <ComboBox x:Name="cmbSale" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Data i Godzina (format: YYYY-MM-DD HH:MM):"/>
+                    <TextBox x:Name="txtDataSeansu" Height="30" Margin="0,0,0,10" Text="2025-11-12 18:00"/>
+
+                    <TextBlock Text="Cena biletu (zł):"/>
+                    <TextBox x:Name="txtCenaSeansu" Height="30" Margin="0,0,0,20" Text="25.00"/>
+
+                    <Button Content="Dodaj Seans" Height="40" Background="LightBlue" Click="btnDodajSeans_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Dodaj Film">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Nowy Film" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Tytuł:"/>
+                    <TextBox x:Name="txtTytul" Height="30" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Kategoria:"/>
+                    <TextBox x:Name="txtKategoria" Height="30" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Czas trwania (minuty):"/>
+                    <TextBox x:Name="txtCzas" Height="30" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Opis:"/>
+                    <TextBox x:Name="txtOpis" Height="60" Margin="0,0,0,20" TextWrapping="Wrap"/>
+
+                    <Button Content="Zapisz Film" Height="40" Click="btnDodajFilm_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Wszystkie Rezerwacje">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Content="Odśwież / Pobierz listę" Height="30" Click="btnOdswiezRezerwacje_Click" Margin="0,0,0,10"/>
+
+                    <DataGrid x:Name="gridRezerwacje" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Klient" Binding="{Binding Klient}" Width="150"/>
+                            <DataGridTextColumn Header="Film" Binding="{Binding Film}" Width="150"/>
+                            <DataGridTextColumn Header="Data" Binding="{Binding Data, StringFormat='dd.MM HH:mm'}" Width="120"/>
+                            <DataGridTextColumn Header="Miejsca" Binding="{Binding IloscMiejsc}" Width="60"/>
+
+                            <DataGridTemplateColumn Header="Akcje" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Anuluj" Background="Red" Foreground="White" Click="btnUsunRezerwacje_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

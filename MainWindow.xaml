@@ -13,6 +13,7 @@
             <TextBlock Text="Szukaj filmu:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14"/>
             <TextBox x:Name="txtSzukaj" Width="200" Height="30" VerticalContentAlignment="Center" FontSize="14"/>
             <Button x:Name="btnSzukaj" Content="Szukaj" Width="100" Margin="10,0,0,0" Click="btnSzukaj_Click"/>
+            <Button Content="Panel Admina" Width="100" Margin="20,0,0,0" Click="btnAdmin_Click" Background="#EEEEEE"/>
         </StackPanel>
 
         <ListView x:Name="listaWynikow" Grid.Row="1" FontSize="14" MouseDoubleClick="listaWynikow_MouseDoubleClick">
