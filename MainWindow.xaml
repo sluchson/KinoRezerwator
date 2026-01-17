@@ -1,7 +1,7 @@
 ﻿<Window x:Class="KinoRezerwator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="KinoRezerwator RZE - Wyszukiwarka" Height="450" Width="800">
+        Title="KinoRezerwator RZE - Wyszukiwarka" Height="500" Width="900" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -9,25 +9,45 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBlock Text="Szukaj filmu:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14"/>
-            <TextBox x:Name="txtSzukaj" Width="200" Height="30" VerticalContentAlignment="Center" FontSize="14"/>
-            <Button x:Name="btnSzukaj" Content="Szukaj" Width="100" Margin="10,0,0,0" Click="btnSzukaj_Click"/>
-            <Button Content="Panel Admina" Width="100" Margin="20,0,0,0" Click="btnAdmin_Click" Background="#EEEEEE"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
 
-        <ListView x:Name="listaWynikow" Grid.Row="1" FontSize="14" MouseDoubleClick="listaWynikow_MouseDoubleClick">
+            <TextBox x:Name="txtSzukaj" Grid.Column="0" Margin="0,0,5,0" Padding="5" FontSize="14" ToolTip="Wpisz tytuł filmu..."/>
+
+            <ComboBox x:Name="comboKategorie" Grid.Column="1" Margin="0,0,5,0" 
+              DisplayMemberPath="Nazwa" 
+              SelectedValuePath="Id"
+              VerticalContentAlignment="Center">
+            </ComboBox>
+
+            <DatePicker x:Name="datePicker" Grid.Column="2" Margin="0,0,5,0" VerticalContentAlignment="Center"
+                ToolTip="Wybierz datę seansu"/>
+
+            <Button x:Name="btnSzukaj" Grid.Column="3" Content="Szukaj" Click="btnSzukaj_Click" Margin="0,0,5,0"/>
+            <Button x:Name="btnAdmin" Grid.Column="4" Content="Panel Admina" Click="btnAdmin_Click"/>
+        </Grid>
+
+        <ListView x:Name="listaWynikow" Grid.Row="1" 
+          MouseDoubleClick="listaWynikow_MouseDoubleClick"
+          GridViewColumnHeader.Click="listaWynikow_Click">
+
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Film" DisplayMemberBinding="{Binding TytulFilmu}" Width="200"/>
+                    <GridViewColumn Header="Film" DisplayMemberBinding="{Binding TytulFilmu}" Width="180"/>
                     <GridViewColumn Header="Kategoria" DisplayMemberBinding="{Binding Kategoria}" Width="100"/>
-
-                    <GridViewColumn Header="Cena" DisplayMemberBinding="{Binding Cena, StringFormat=C}" Width="80"/>
-
-                    <GridViewColumn Header="Kino" DisplayMemberBinding="{Binding Kino}" Width="150"/>
-                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataGodzina, StringFormat='dd.MM HH:mm'}" Width="120"/>
+                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataGodzina, StringFormat=dd.MM.yyyy}" Width="90"/>
+                    <GridViewColumn Header="Godzina" DisplayMemberBinding="{Binding DataGodzina, StringFormat=HH:mm}" Width="70"/>
+                    <GridViewColumn Header="Miejsce" DisplayMemberBinding="{Binding Miejsce}" Width="220"/>
+                    <GridViewColumn Header="Cena" DisplayMemberBinding="{Binding Cena, StringFormat={}{0:C}}" Width="80"/>
                 </GridView>
             </ListView.View>
         </ListView>
+
     </Grid>
 </Window>

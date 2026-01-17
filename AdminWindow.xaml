@@ -1,83 +1,212 @@
 ﻿<Window x:Class="KinoRezerwator.AdminWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Panel Administratora" Height="600" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <TabControl Margin="10">
+        Title="Panel Administratora" Height="600" Width="900" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <TabControl>
+            <TabItem Header="Filmy">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-            <TabItem Header="Zarządzaj Repertuarem">
-                <StackPanel Margin="20">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="DODAJ NOWY FILM" FontWeight="Bold" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="Dodaj Nowy Seans" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+                        <TextBlock Text="Tytuł:"/>
+                        <TextBox x:Name="txtFilmTytul" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Wybierz Film:"/>
-                    <ComboBox x:Name="cmbFilmy" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10"/>
+                        <TextBlock Text="Kategoria:"/>
+                        <ComboBox x:Name="comboFilmKategoria" 
+                             DisplayMemberPath="Nazwa" 
+                             SelectedValuePath="Id" 
+                             IsEditable="True" 
+                             Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Wybierz Kino:"/>
-                    <ComboBox x:Name="cmbKina" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10" SelectionChanged="cmbKina_SelectionChanged"/>
+                        <TextBlock Text="Czas trwania (min):"/>
+                        <TextBox x:Name="txtFilmCzas" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Wybierz Salę (wybierz kino najpierw):"/>
-                    <ComboBox x:Name="cmbSale" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Height="30" Margin="0,0,0,10"/>
+                        <TextBlock Text="Opis:"/>
+                        <TextBox x:Name="txtFilmOpis" Height="60" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="Data i Godzina (format: YYYY-MM-DD HH:MM):"/>
-                    <TextBox x:Name="txtDataSeansu" Height="30" Margin="0,0,0,10" Text="2025-11-12 18:00"/>
+                        <Button Content="Zapisz Film" Click="btnZapiszFilm_Click" Height="30" Background="LightBlue" Margin="0,0,0,20"/>
 
-                    <TextBlock Text="Cena biletu (zł):"/>
-                    <TextBox x:Name="txtCenaSeansu" Height="30" Margin="0,0,0,20" Text="25.00"/>
+                        <Separator/>
+                        <TextBlock Text="AKCJE NA LIŚCIE" FontWeight="Bold" Margin="0,10"/>
+                        <Button Content="Usuń Zaznaczony Film" Click="btnUsunFilm_Click" Background="#FFDDDD" Height="30"/>
+                    </StackPanel>
 
-                    <Button Content="Dodaj Seans" Height="40" Background="LightBlue" Click="btnDodajSeans_Click"/>
-                </StackPanel>
+                    <DataGrid x:Name="gridFilmy" Grid.Column="1" Margin="5" AutoGenerateColumns="True" IsReadOnly="True" SelectionMode="Single"/>
+                </Grid>
             </TabItem>
 
-            <TabItem Header="Dodaj Film">
-                <StackPanel Margin="20">
-                    <TextBlock Text="Nowy Film" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TabItem Header="Seanse">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Tytuł:"/>
-                    <TextBox x:Name="txtTytul" Height="30" Margin="0,0,0,10"/>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="PLANOWANIE SEANSU" FontWeight="Bold" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="Kategoria:"/>
-                    <TextBox x:Name="txtKategoria" Height="30" Margin="0,0,0,10"/>
+                        <TextBlock Text="Film:"/>
+                        <ComboBox x:Name="comboFilmy" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Czas trwania (minuty):"/>
-                    <TextBox x:Name="txtCzas" Height="30" Margin="0,0,0,10"/>
+                        <TextBlock Text="Kino:"/>
+                        <ComboBox x:Name="comboKina" DisplayMemberPath="Nazwa" SelectedValuePath="Id" SelectionChanged="comboKina_SelectionChanged" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Opis:"/>
-                    <TextBox x:Name="txtOpis" Height="60" Margin="0,0,0,20" TextWrapping="Wrap"/>
+                        <TextBlock Text="Sala:"/>
+                        <ComboBox x:Name="comboSale" DisplayMemberPath="Nazwa" SelectedValuePath="Id" Margin="0,0,0,5"/>
 
-                    <Button Content="Zapisz Film" Height="40" Click="btnDodajFilm_Click"/>
-                </StackPanel>
+                        <TextBlock Text="Data:"/>
+                        <DatePicker x:Name="datePicker" Margin="0,0,0,5"/>
+
+                        <TextBlock Text="Godzina (HH:MM):"/>
+                        <TextBox x:Name="txtGodzina" Text="18:00" Margin="0,0,0,5"/>
+
+                        <TextBlock Text="Cena (zł):"/>
+                        <TextBox x:Name="txtCena" Text="25,00" Margin="0,0,0,10"/>
+
+                        <Button Content="Dodaj Seans" Click="btnDodajSeans_Click" Height="30" Background="LightBlue" Margin="0,0,0,20"/>
+
+                        <Separator/>
+                        <Button Content="Usuń Zaznaczony Seans" Click="btnUsunSeans_Click" Background="#FFDDDD" Height="30" Margin="0,10"/>
+                    </StackPanel>
+
+                    <DataGrid x:Name="gridSeanse" Grid.Column="1" Margin="5" AutoGenerateColumns="True" IsReadOnly="True"/>
+                </Grid>
             </TabItem>
 
-            <TabItem Header="Wszystkie Rezerwacje">
+            <TabItem Header="Kina">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="5">
+                        <TextBlock Text="DODAJ NOWE KINO" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Nazwa kina:"/>
+                        <TextBox x:Name="txtKinoNazwa" Margin="0,0,0,5"/>
+                        <TextBlock Text="Adres:"/>
+                        <TextBox x:Name="txtKinoAdres" Margin="0,0,0,15"/>
+
+                        <Separator/>
+
+                        <TextBlock Text="DEFINIOWANIE SAL" FontWeight="Bold" Margin="0,10,0,5"/>
+
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                <TextBlock Text="Nazwa:"/>
+                                <TextBox x:Name="txtNazwaSali"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,5,0">
+                                <TextBlock Text="Rzędy:"/>
+                                <TextBox x:Name="txtRzedy" Text="10"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,5,0">
+                                <TextBlock Text="M-ca:"/>
+                                <TextBox x:Name="txtMiejsca" Text="15"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="3" Content="+" Click="btnDodajSaleDoListy_Click" VerticalAlignment="Bottom" Height="20" Background="LightGray"/>
+                        </Grid>
+
+                        <TextBlock Text="Lista sal do utworzenia:" FontStyle="Italic" FontSize="10"/>
+                        <ListBox x:Name="listaTymczasowychSal" Height="80" Margin="0,0,0,15"/>
+
+                        <Button Content="ZAPISZ CAŁE KINO" Click="btnZapiszKinoCalosc_Click" Background="LightBlue" Height="40" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                        <Separator/>
+                        <Button Content="Usuń Zaznaczone Kino" Click="btnUsunKino_Click" Background="#FFDDDD" Height="30" Margin="0,10"/>
+                    </StackPanel>
+
+                    <DataGrid x:Name="gridKina" Grid.Column="1" Margin="5" AutoGenerateColumns="True" IsReadOnly="True"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Rezerwacje">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="Odśwież Listę" Click="btnOdswiezRezerwacje_Click" Width="120" Margin="5"/>
+                        <Button Content="Anuluj Rezerwację" Click="btnAnuluj_Click" Width="150" Margin="5" Background="#FFDDDD"/>
+                    </StackPanel>
+                    <DataGrid x:Name="gridRezerwacje" Grid.Row="1" AutoGenerateColumns="True" IsReadOnly="True"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Statystyki i Raporty">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Button Content="Odśwież / Pobierz listę" Height="30" Click="btnOdswiezRezerwacje_Click" Margin="0,0,0,10"/>
+                    <UniformGrid Grid.Row="0" Columns="2" Margin="0,0,0,20">
+                        <Border Background="#E1F5FE" CornerRadius="10" Padding="15" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="CAŁKOWITY PRZYCHÓD" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock x:Name="txtTotalPrzychod" Text="0.00 PLN" FontSize="32" FontWeight="Bold" Foreground="#0277BD"/>
+                            </StackPanel>
+                        </Border>
 
-                    <DataGrid x:Name="gridRezerwacje" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                            <DataGridTextColumn Header="Klient" Binding="{Binding Klient}" Width="150"/>
-                            <DataGridTextColumn Header="Film" Binding="{Binding Film}" Width="150"/>
-                            <DataGridTextColumn Header="Data" Binding="{Binding Data, StringFormat='dd.MM HH:mm'}" Width="120"/>
-                            <DataGridTextColumn Header="Miejsca" Binding="{Binding IloscMiejsc}" Width="60"/>
+                        <Border Background="#E8F5E9" CornerRadius="10" Padding="15" Margin="10,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="SPRZEDANE BILETY" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock x:Name="txtTotalBilety" Text="0" FontSize="32" FontWeight="Bold" Foreground="#2E7D32"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
 
-                            <DataGridTemplateColumn Header="Akcje" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Anuluj" Background="Red" Foreground="White" Click="btnUsunRezerwacje_Click"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <GroupBox Grid.Column="0" Header="Najlepiej zarabiające filmy" FontWeight="Bold">
+                            <DataGrid x:Name="gridTopFilmy" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tytuł Filmu" Binding="{Binding tytul}" Width="*"/>
+                                    <DataGridTextColumn Header="Bilety" Binding="{Binding sprzedane_bilety}" Width="60"/>
+                                    <DataGridTextColumn Header="Przychód" Binding="{Binding przychod, StringFormat={}{0:C}}" Width="90"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Column="2" Header="Popularność Kategorii" FontWeight="Bold">
+                            <DataGrid x:Name="gridTopKategorie" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Kategoria" Binding="{Binding kategoria}" Width="*"/>
+                                    <DataGridTextColumn Header="Sprzedaż" Binding="{Binding sprzedane_bilety}" Width="80"/>
+                                    <DataGridTextColumn Header="Udział" Binding="{Binding udzial_procentowy, StringFormat={}{0}%}" Width="60"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+                    </Grid>
+
+                    <Button Grid.Row="1" Content="Odśwież Dane" Click="btnOdswiezStatystyki_Click" 
+                VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                Margin="0,0,10,10" Width="100" Height="25" Background="White"/>
                 </Grid>
             </TabItem>
-
         </TabControl>
     </Grid>
 </Window>

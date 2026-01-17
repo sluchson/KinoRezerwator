@@ -16,11 +16,13 @@ namespace KinoRezerwator
 
         private List<int> _wybraneMiejsca = new List<int>();
 
-        public RezerwacjaWindow(int idSeansu, string tytul, string kino)
+        public RezerwacjaWindow(int idSeansu, string tytul, string kino, string opis)
         {
             InitializeComponent();
             _idSeansu = idSeansu;
-            txtTytulFilmu.Text = $"{tytul}\n{kino}";
+
+            txtTytulFilmu.Text = $"{tytul} ({kino})";
+            txtOpis.Text = opis; 
 
             ZaladujMape();
         }

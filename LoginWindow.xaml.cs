@@ -5,12 +5,18 @@ namespace KinoRezerwator
 {
     public partial class LoginWindow : Window
     {
+        #region Pola i Inicjalizacja
+
         private readonly BazaDanych _baza = new BazaDanych();
 
         public LoginWindow()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Logika Logowania
 
         private async void btnZaloguj_Click(object sender, RoutedEventArgs e)
         {
@@ -26,31 +32,31 @@ namespace KinoRezerwator
             try
             {
                 btnZaloguj.IsEnabled = false;
+                var (sukces, komunikat) = await _baza.ZalogujAdmina(login, haslo);
 
-                bool czyZalogowano = await _baza.ZalogujAdmina(login, haslo);
-
-                if (czyZalogowano)
+                if (sukces)
                 {
-                    MessageBox.Show("Zalogowano pomyślnie!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(komunikat, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     var adminPanel = new AdminWindow();
                     adminPanel.Show();
-
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Błędny login lub hasło.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(komunikat, "Błąd logowania", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd połączenia: " + ex.Message);
+                MessageBox.Show("Błąd krytyczny połączenia: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
                 btnZaloguj.IsEnabled = true;
             }
         }
+
+        #endregion
     }
 }
