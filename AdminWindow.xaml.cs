@@ -74,15 +74,58 @@ namespace KinoRezerwator
         {
             try
             {
-                string kategoriaTekst = comboFilmKategoria.Text;
+                string tytul = txtFilmTytul.Text.Trim();
+                string opis = txtFilmOpis.Text.Trim();
+                string czasTekst = txtFilmCzas.Text.Trim();
+                string kategoriaTekst = comboFilmKategoria.Text.Trim(); // Text, bo można wpisać nową
 
-                await _baza.DodajFilm(txtFilmTytul.Text, txtFilmOpis.Text, int.Parse(txtFilmCzas.Text), kategoriaTekst);
-                MessageBox.Show("Film dodany!");
+                if (string.IsNullOrWhiteSpace(tytul))
+                {
+                    MessageBox.Show("Proszę podać tytuł filmu.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtFilmTytul.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(kategoriaTekst))
+                {
+                    MessageBox.Show("Proszę wybrać lub wpisać kategorię filmu.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    comboFilmKategoria.Focus();
+                    return;
+                }
+
+                if (!int.TryParse(czasTekst, out int czasTrwania) || czasTrwania <= 0)
+                {
+                    MessageBox.Show("Proszę podać poprawny czas trwania w minutach (liczba całkowita większa od 0).", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtFilmCzas.Focus();
+                    txtFilmCzas.SelectAll();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(opis))
+                {
+                    MessageBox.Show("Proszę dodać krótki opis filmu.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtFilmOpis.Focus();
+                    return;
+                }
+
+                await _baza.DodajFilm(tytul, opis, czasTrwania, kategoriaTekst);
+
+                MessageBox.Show("Film został dodany pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                txtFilmTytul.Clear();
+                txtFilmOpis.Clear();
+                txtFilmCzas.Clear();
+                comboFilmKategoria.Text = "";
+
                 OdswiezFilmy();
+
                 comboFilmy.ItemsSource = await _baza.PobierzFilmyLista();
                 comboFilmKategoria.ItemsSource = await _baza.PobierzKategorieLista();
             }
-            catch (Exception ex) { MessageBox.Show("Błąd zapisu filmu: " + ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd zapisu filmu: " + ex.Message, "Błąd krytyczny", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void btnUsunFilm_Click(object sender, RoutedEventArgs e)
@@ -213,8 +256,15 @@ namespace KinoRezerwator
             {
                 if (string.IsNullOrWhiteSpace(txtKinoNazwa.Text) || string.IsNullOrWhiteSpace(txtKinoAdres.Text))
                 {
-                    MessageBox.Show("Podaj nazwę i adres kina!");
+                    MessageBox.Show("Podaj nazwę i adres kina!", "Brak danych", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
+                }
+
+                if (_tymczasoweSale.Count == 0)
+                {
+                    MessageBox.Show("Kino musi posiadać przynajmniej jedną salę!\nUzupełnij dane sali po prawej i kliknij 'Dodaj Salę'.",
+                                    "Brak sal", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return; 
                 }
 
                 int noweIdKina = await _baza.DodajKino(txtKinoNazwa.Text, txtKinoAdres.Text);
@@ -224,19 +274,20 @@ namespace KinoRezerwator
                     await _baza.DodajSale(noweIdKina, sala.Nazwa, sala.Rzedy, sala.Miejsca);
                 }
 
-                MessageBox.Show("Kino i sale zostały zapisane!");
+                MessageBox.Show("Kino i jego sale zostały zapisane!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 txtKinoNazwa.Clear();
                 txtKinoAdres.Clear();
+
                 _tymczasoweSale.Clear();
-                listaTymczasowychSal.ItemsSource = null;
+                listaTymczasowychSal.ItemsSource = null; 
 
                 OdswiezKina();
                 comboKina.ItemsSource = await _baza.PobierzKinaLista();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd zapisu kina: " + ex.Message);
+                MessageBox.Show("Błąd zapisu kina: " + ex.Message, "Błąd krytyczny", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

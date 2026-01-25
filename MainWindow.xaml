@@ -1,7 +1,8 @@
 ﻿<Window x:Class="KinoRezerwator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="KinoRezerwator RZE - Wyszukiwarka" Height="500" Width="900" WindowStartupLocation="CenterScreen">
+        Title="KinoRezerwator RZE - Wyszukiwarka" Height="500" Width="900" 
+        WindowStartupLocation="CenterScreen">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -12,30 +13,34 @@
         <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="txtSzukaj" Grid.Column="0" Margin="0,0,5,0" Padding="5" FontSize="14" ToolTip="Wpisz tytuł filmu..."/>
+            <TextBox x:Name="txtSzukaj" Grid.Column="0" Margin="0,0,5,0" Padding="5" FontSize="14" 
+                     ToolTip="Wpisz tytuł filmu..."/>
 
             <ComboBox x:Name="comboKategorie" Grid.Column="1" Margin="0,0,5,0" 
-              DisplayMemberPath="Nazwa" 
-              SelectedValuePath="Id"
-              VerticalContentAlignment="Center">
+                      DisplayMemberPath="Nazwa" 
+                      SelectedValuePath="Id"
+                      VerticalContentAlignment="Center"
+                      SelectionChanged="comboKategorie_SelectionChanged">
             </ComboBox>
 
-            <DatePicker x:Name="datePicker" Grid.Column="2" Margin="0,0,5,0" VerticalContentAlignment="Center"
-                ToolTip="Wybierz datę seansu"/>
+            <DatePicker x:Name="datePicker" Grid.Column="2" Margin="0,0,5,0" 
+                        VerticalContentAlignment="Center"
+                        ToolTip="Wybierz datę seansu"
+                        SelectedDateChanged="datePicker_SelectedDateChanged"/>
 
             <Button x:Name="btnSzukaj" Grid.Column="3" Content="Szukaj" Click="btnSzukaj_Click" Margin="0,0,5,0"/>
             <Button x:Name="btnAdmin" Grid.Column="4" Content="Panel Admina" Click="btnAdmin_Click"/>
         </Grid>
 
         <ListView x:Name="listaWynikow" Grid.Row="1" 
-          MouseDoubleClick="listaWynikow_MouseDoubleClick"
-          GridViewColumnHeader.Click="listaWynikow_Click">
+                  MouseDoubleClick="listaWynikow_MouseDoubleClick"
+                  GridViewColumnHeader.Click="listaWynikow_Click">
 
             <ListView.View>
                 <GridView>

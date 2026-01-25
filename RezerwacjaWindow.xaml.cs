@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives; 
 using System.Windows.Media;
+using System.Text.RegularExpressions;
 
 namespace KinoRezerwator
 {
@@ -47,22 +48,22 @@ namespace KinoRezerwator
                 foreach (var miejsce in miejsca)
                 {
                     var btn = new Button();
-                    btn.Content = $"{miejsce.Rzad}-{miejsce.Numer}"; 
+                    btn.Content = $"{miejsce.Rzad}-{miejsce.Numer}";
                     btn.Margin = new Thickness(2);
                     btn.Width = 40;
                     btn.Height = 40;
-                    btn.Tag = miejsce.IdMiejsca; 
+                    btn.Tag = miejsce.IdMiejsca;
 
-                    if (miejsce.Status == "zajete")
+                    if (miejsce.Status == "Zajęte")
                     {
                         btn.Background = Brushes.Red;
-                        btn.IsHitTestVisible = false; 
-                        btn.Opacity = 0.6; 
+                        btn.IsHitTestVisible = false;
+                        btn.Opacity = 0.6;
                     }
                     else
                     {
                         btn.Background = Brushes.Green;
-                        btn.Click += Miejsce_Click; 
+                        btn.Click += Miejsce_Click;
                     }
 
                     gridMiejsca.Children.Add(btn);
@@ -93,48 +94,60 @@ namespace KinoRezerwator
 
         private async void btnRezerwuj_Click(object sender, RoutedEventArgs e)
         {
-            if (_wybraneMiejsca.Count == 0)
+            string imieNazwisko = txtImie.Text.Trim();
+            string email = txtEmail.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(imieNazwisko))
             {
-                MessageBox.Show("Nie wybrano żadnych miejsc!", "Uwaga", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Proszę podać Imię i Nazwisko.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            string imieWzorzec = @"^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+\s+[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$";
+            if (!Regex.IsMatch(imieNazwisko, imieWzorzec))
+            {
+                MessageBox.Show("Podaj poprawne Imię i Nazwisko (np. 'Jan Kowalski').\nOba człony muszą zaczynać się z wielkiej litery.",
+                                "Błąd formatu", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            string imie = txtImie.Text.Trim();
-            string email = txtEmail.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(imie) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
-                MessageBox.Show("Proszę podać Imię i E-mail.", "Brak danych", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Proszę podać adres E-mail.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string emailWzorzec = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+            if (!Regex.IsMatch(email, emailWzorzec))
+            {
+                MessageBox.Show("Podany adres E-mail jest nieprawidłowy.\nUpewnij się, że nie zawiera polskich znaków (np. ą, ź) ani spacji.",
+                                "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (_wybraneMiejsca.Count == 0)
+            {
+                MessageBox.Show("Proszę zaznaczyć przynajmniej jedno miejsce na mapie.", "Brak miejsc", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             try
             {
                 btnRezerwuj.IsEnabled = false;
-                btnRezerwuj.Content = "Przetwarzanie...";
 
-                await _baza.ZrobRezerwacje(_idSeansu, _wybraneMiejsca, imie, email);
+                await _baza.ZrobRezerwacje(_idSeansu, _wybraneMiejsca, imieNazwisko, email);
 
-                MessageBox.Show("Rezerwacja zakończona sukcesem!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                this.Close();
-            }
-            catch (PostgresException ex)
-            {
-                MessageBox.Show($"Błąd rezerwacji: {ex.MessageText}", "Błąd Bazy Danych", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                ZaladujMape();
+                MessageBox.Show("Rezerwacja została pomyślnie utworzona!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close(); 
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Wystąpił nieoczekiwany błąd: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Błąd rezerwacji: " + ex.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
                 btnRezerwuj.IsEnabled = true;
-                btnRezerwuj.Content = "POTWIERDZAM REZERWACJĘ";
             }
-        
         }
     }
 }

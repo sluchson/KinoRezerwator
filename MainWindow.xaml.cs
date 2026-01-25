@@ -35,7 +35,6 @@ namespace KinoRezerwator
                 comboKategorie.ItemsSource = kategorie;
                 comboKategorie.SelectedIndex = 0;
 
-                WyszukajFilmy("");
             }
             catch (Exception ex)
             {
@@ -45,9 +44,19 @@ namespace KinoRezerwator
 
         #endregion
 
-        #region Logika Wyszukiwania
+        #region Logika Wyszukiwania (Automatyczna)
 
         private void btnSzukaj_Click(object sender, RoutedEventArgs e)
+        {
+            WyszukajFilmy(txtSzukaj.Text);
+        }
+
+        private void comboKategorie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            WyszukajFilmy(txtSzukaj.Text);
+        }
+
+        private void datePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             WyszukajFilmy(txtSzukaj.Text);
         }
@@ -56,8 +65,10 @@ namespace KinoRezerwator
         {
             try
             {
+                if (!IsLoaded) return;
+
                 btnSzukaj.IsEnabled = false;
-                btnSzukaj.Content = "Szukanie...";
+                btnSzukaj.Content = "..."; 
 
                 int? idKategorii = null;
                 if (comboKategorie.SelectedValue is int wybraneId && wybraneId != -1)
@@ -70,11 +81,6 @@ namespace KinoRezerwator
                 var wyniki = await _baza.WyszukajSeanse(szukanaFraza, idKategorii, wybranaData);
 
                 listaWynikow.ItemsSource = wyniki;
-
-                if (wyniki.Count == 0)
-                {
-                    MessageBox.Show("Brak seansów dla wybranych kryteriów.");
-                }
             }
             catch (Exception ex)
             {
